@@ -1,0 +1,2425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jovie Forex Trading Plan Journal System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter','agency fb', 'Arial Narrow', Arial, ; transition: all 0.3s ease; }
+        .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .card-shadow { box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        .input-focus:focus { border-color: #667eea; box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1); }
+        .tab-active { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+        .trade-positive { background-color: #dcfce7; border-left: 4px solid #16a34a; }
+        .trade-negative { background-color: #fef2f2; border-left: 4px solid #dc2626; }
+        .stats-card { background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); }
+        
+        /* Dark theme styles */
+        .dark-theme {
+            background-color: #1a1a1a !important;
+            color: #e5e5e5 !important;
+        }
+        .dark-theme .bg-white {
+            background-color: #2d2d2d !important;
+            color: #e5e5e5 !important;
+        }
+        .dark-theme .bg-gray-50 {
+            background-color: #1a1a1a !important;
+        }
+        .dark-theme .text-gray-800 {
+            color: #e5e5e5 !important;
+        }
+        .dark-theme .text-gray-700 {
+            color: #d1d1d1 !important;
+        }
+        .dark-theme .text-gray-600 {
+            color: #b5b5b5 !important;
+        }
+        .dark-theme .text-gray-500 {
+            color: #9a9a9a !important;
+        }
+        .dark-theme .border-gray-300 {
+            border-color: #4a4a4a !important;
+        }
+        .dark-theme .bg-gray-100 {
+            background-color: #3a3a3a !important;
+            color: #e5e5e5 !important;
+        }
+        .dark-theme .bg-gray-200 {
+            background-color: #4a4a4a !important;
+        }
+        .dark-theme .card-shadow {
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3) !important;
+        }
+        .dark-theme .stats-card {
+            background: linear-gradient(135deg, #3a3a3a 0%, #2d2d2d 100%) !important;
+        }
+        .dark-theme .trade-positive {
+            background-color: #1a3a1a !important;
+            border-left: 4px solid #16a34a !important;
+        }
+        .dark-theme .trade-negative {
+            background-color: #3a1a1a !important;
+            border-left: 4px solid #dc2626 !important;
+        }
+        .dark-theme input, .dark-theme select, .dark-theme textarea {
+            background-color: #3a3a3a !important;
+            color: #e5e5e5 !important;
+            border-color: #4a4a4a !important;
+        }
+        .dark-theme input:focus, .dark-theme select:focus, .dark-theme textarea:focus {
+            background-color: #4a4a4a !important;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Header -->
+    <header class="gradient-bg text-white py-6 px-4">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex justify-between items-center mb-4">
+                <div></div>
+                <div class="flex items-center space-x-4">
+                    <!-- Font Size Controls -->
+                    <div class="flex items-center space-x-2 bg-white/10 rounded-lg px-3 py-2">
+                        <span class="text-sm">Font:</span>
+                        <button onclick="changeFontSize('decrease')" class="bg-white/20 hover:bg-white/30 rounded px-2 py-1 text-sm transition-all duration-200">A-</button>
+                        <button onclick="changeFontSize('increase')" class="bg-white/20 hover:bg-white/30 rounded px-2 py-1 text-sm transition-all duration-200">A+</button>
+                    </div>
+                    <!-- Theme Toggle -->
+                    <button onclick="toggleTheme()" id="theme-toggle" class="bg-white/10 hover:bg-white/20 rounded-lg px-4 py-2 text-sm transition-all duration-200 flex items-center space-x-2">
+                        <span id="theme-icon">🌙</span>
+                        <span id="theme-text">Dark</span>
+                    </button>
+                </div>
+            </div>
+            <h1 class="text-3xl font-bold text-center">📈 WELCOME BACK😎😎Forex Trading Plan & Journal System</h1>
+            <p class="text-center mt-2 text-blue-100">Your Complete Trading Management Platform</p>
+        </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <nav class="bg-white shadow-sm border-b">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex flex-wrap gap-1 py-2">
+                <button onclick="showTab('goals')" id="tab-goals" class="tab-button px-4 py-2 rounded-lg font-medium transition-all duration-200 tab-active text-sm">Goals</button>
+                <button onclick="showTab('strategy')" id="tab-strategy" class="tab-button px-4 py-2 rounded-lg font-medium transition-all duration-200 bg-gray-100 text-gray-700 hover:bg-gray-200 text-sm">Strategy</button>
+                <button onclick="showTab('risk')" id="tab-risk" class="tab-button px-4 py-2 rounded-lg font-medium transition-all duration-200 bg-gray-100 text-gray-700 hover:bg-gray-200 text-sm">Risk</button>
+                <button onclick="showTab('routine')" id="tab-routine" class="tab-button px-4 py-2 rounded-lg font-medium transition-all duration-200 bg-gray-100 text-gray-700 hover:bg-gray-200 text-sm">Routine</button>
+                <button onclick="showTab('journal')" id="tab-journal" class="tab-button px-4 py-2 rounded-lg font-medium transition-all duration-200 bg-gray-100 text-gray-700 hover:bg-gray-200 text-sm">Journal</button>
+                <button onclick="showTab('analytics')" id="tab-analytics" class="tab-button px-4 py-2 rounded-lg font-medium transition-all duration-200 bg-gray-100 text-gray-700 hover:bg-gray-200 text-sm">Analytics</button>
+                <button onclick="showTab('reports')" id="tab-reports" class="tab-button px-4 py-2 rounded-lg font-medium transition-all duration-200 bg-gray-100 text-gray-700 hover:bg-gray-200 text-sm">Reports</button>
+                <button onclick="showTab('settings')" id="tab-settings" class="tab-button px-4 py-2 rounded-lg font-medium transition-all duration-200 bg-gray-100 text-gray-700 hover:bg-gray-200 text-sm">Settings</button>
+            </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 py-8">
+        
+        <!-- Trading Goals Tab -->
+        <div id="goals-tab" class="tab-content">
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-white rounded-xl p-6 card-shadow">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                        🎯 Long-Term Goals
+                    </h2>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Annual Income Target</label>
+                            <input type="text" id="annual-income" placeholder="e.g., $50,000" class="w-full px-4 py-3 border border-gray-300 rounded-lg input-focus transition-all duration-200">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Account Growth Target (%)</label>
+                            <input type="text" id="growth-target" placeholder="e.g., 20%" class="w-full px-4 py-3 border border-gray-300 rounded-lg input-focus transition-all duration-200">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Target Account Size</label>
+                            <input type="text" id="target-account" placeholder="e.g., $100,000" class="w-full px-4 py-3 border border-gray-300 rounded-lg input-focus transition-all duration-200">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Timeline</label>
+                            <select id="timeline" class="w-full px-4 py-3 border border-gray-300 rounded-lg input-focus transition-all duration-200">
+                                <option>6 months</option>
+                                <option>1 Year</option>
+                                <option>2 Years</option>
+                                <option>3 Years</option>
+                                <option>5 Years</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl p-6 card-shadow">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                        ⚡ Short-Term Goals
+                    </h2>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Monthly Income Target</label>
+                            <input type="text" id="monthly-income" placeholder="e.g., $4,000" class="w-full px-4 py-3 border border-gray-300 rounded-lg input-focus transition-all duration-200">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Weekly Profit Target</label>
+                            <input type="text" id="weekly-profit" placeholder="e.g., $1,000" class="w-full px-4 py-3 border border-gray-300 rounded-lg input-focus transition-all duration-200">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Max Weekly Trades</label>
+                            <input type="text" id="max-trades" placeholder="e.g., 15" class="w-full px-4 py-3 border border-gray-300 rounded-lg input-focus transition-all duration-200">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Win Rate Target (%)</label>
+                            <input type="text" id="win-rate" placeholder="e.g., 65%" class="w-full px-4 py-3 border border-gray-300 rounded-lg input-focus transition-all duration-200">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-8 text-center">
+                <button onclick="saveGoals()" class="gradient-bg text-white px-8 py-3 rounded-lg font-semibold hover:opacity-90 transition-all duration-200">Save Goals</button>
+            </div>
+        </div>
+
+
+
+        <!-- Trading Strategy Tab -->
+        <div id="strategy-tab" class="tab-content hidden">
+            <div class="grid lg:grid-cols-2 gap-8">
+                <div class="bg-white rounded-xl p-6 card-shadow">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6">📊 Trading Style & Preferences</h2>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Trading Style</label>
+                            <select id="trading-style" class="w-full px-4 py-3 border border-gray-300 rounded-lg input-focus">
+                                <option>Day Trading</option>
+                                <option>Swing Trading</option>
+                                <option>Scalping</option>
+                                <option>Position Trading</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Preferred Currency Pairs</label>
+                            <textarea id="currency-pairs" placeholder="e.g., EUR/USD, GBP/USD, USD/JPY, AUD/USD" class="w-full px-4 py-3 border border-gray-300 rounded-lg input-focus h-20 resize-none"></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Primary Timeframes</label>
+                            <div class="grid grid-cols-2 gap-2">
+                                <label class="flex items-center space-x-2">
+                                    <input type="checkbox" class="rounded text-blue-600">
+                                    <span>1M</span>
+                                </label>
+                                <label class="flex items-center space-x-2">
+                                    <input type="checkbox" class="rounded text-blue-600">
+                                    <span>5M</span>
+                                </label>
+                                <label class="flex items-center space-x-2">
+                                    <input type="checkbox" class="rounded text-blue-600">
+                                    <span>15M</span>
+                                </label>
+                                <label class="flex items-center space-x-2">
+                                    <input type="checkbox" class="rounded text-blue-600">
+                                    <span>1H</span>
+                                </label>
+                                <label class="flex items-center space-x-2">
+                                    <input type="checkbox" class="rounded text-blue-600">
+                                    <span>4H</span>
+                                </label>
+                                <label class="flex items-center space-x-2">
+                                    <input type="checkbox" class="rounded text-blue-600">
+                                    <span>1D</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl p-6 card-shadow">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6">🔧 Technical Analysis</h2>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Primary Indicators</label>
+                            <textarea id="indicators" placeholder="e.g., Moving Averages (20, 50, 200), RSI, MACD, Bollinger Bands" class="w-full px-4 py-3 border border-gray-300 rounded-lg input-focus h-20 resize-none"></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Entry Strategies</label>
+                            <textarea id="entry-strategies" placeholder="e.g., Breakout above resistance, Pullback to support, Moving average crossover" class="w-full px-4 py-3 border border-gray-300 rounded-lg input-focus h-24 resize-none"></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Exit Strategies</label>
+                            <textarea id="exit-strategies" placeholder="e.g., Take profit at resistance, Stop loss below support, Trailing stop" class="w-full px-4 py-3 border border-gray-300 rounded-lg input-focus h-24 resize-none"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Market Focus Section -->
+            <div class="mt-8 bg-white rounded-xl p-6 card-shadow">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">🎯 Market Focus & Pair Selection</h2>
+                <div class="grid lg:grid-cols-2 gap-8">
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-700 mb-4">Selected Currency Pairs</h3>
+                        <div id="selected-pairs" class="space-y-3">
+                            <div class="pair-selection flex items-center justify-between p-3 border rounded-lg">
+                                <div>
+                                    <select class="pair-select font-medium">
+                                        <option>EUR/USD</option>
+                                        <option>GBP/USD</option>
+                                        <option>USD/JPY</option>
+                                        <option>AUD/USD</option>
+                                        <option>USD/CAD</option>
+                                        <option>USD/CHF</option>
+                                        <option>NZD/USD</option>
+                                        <option>EUR/GBP</option>
+                                        <option>EUR/JPY</option>
+                                        <option>GBP/JPY</option>
+                                    </select>
+                                </div>
+                                <button onclick="removePair(this)" class="text-red-600 hover:text-red-800 text-sm">Remove</button>
+                            </div>
+                        </div>
+                        <button onclick="addPair()" class="mt-4 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-all duration-200">Add Pair</button>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-700 mb-4">Pair Analysis & Reasoning</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Volatility Preferences</label>
+                                <select id="volatility-pref" class="w-full px-4 py-3 border border-gray-300 rounded-lg input-focus">
+                                    <option>High Volatility (>100 pips/day)</option>
+                                    <option>Medium Volatility (50-100 pips/day)</option>
+                                    <option>Low Volatility (<50 pips/day)</option>
+                                    <option>Mixed Approach</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Liquidity Requirements</label>
+                                <select id="liquidity-pref" class="w-full px-4 py-3 border border-gray-300 rounded-lg input-focus">
+                                    <option>Major Pairs Only (Highest Liquidity)</option>
+                                    <option>Majors + Minor Pairs</option>
+                                    <option>Include Exotic Pairs</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Trading Time Zone</label>
+                                <select id="timezone-pref" class="w-full px-4 py-3 border border-gray-300 rounded-lg input-focus">
+                                    <option>Asian Session (Tokyo)</option>
+                                    <option>European Session (London)</option>
+                                    <option>American Session (New York)</option>
+                                    <option>Session Overlaps</option>
+                                    <option>24/7 Trading</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Pair Selection Reasoning</label>
+                                <textarea id="pair-reasoning" placeholder="Explain why these pairs suit your strategy (volatility, spreads, correlation, news impact, etc.)" class="w-full px-4 py-3 border border-gray-300 rounded-lg input-focus h-24 resize-none"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-8 text-center">
+                <button onclick="saveStrategy()" class="gradient-bg text-white px-8 py-3 rounded-lg font-semibold hover:opacity-90 transition-all duration-200">Save Strategy</button>
+            </div>
+        </div>
+
+        <!-- Risk Management Tab -->
+        <div id="risk-tab" class="tab-content hidden">
+            <div class="grid lg:grid-cols-2 gap-8">
+                <div class="bg-white rounded-xl p-6 card-shadow">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6">⚠️ Risk Parameters</h2>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Risk Per Trade (%)</label>
+                            <input type="number" id="risk-per-trade" placeholder="2" step="0.1" class="w-full px-4 py-3 border border-gray-300 rounded-lg input-focus">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Max Daily Drawdown (%)</label>
+                            <input type="number" id="max-drawdown" placeholder="5" step="0.1" class="w-full px-4 py-3 border border-gray-300 rounded-lg input-focus">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Risk-to-Reward Ratio</label>
+                            <select id="risk-reward" class="w-full px-4 py-3 border border-gray-300 rounded-lg input-focus">
+                                <option>1:1</option>
+                                <option>1:1.5</option>
+                                <option>1:2</option>
+                                <option>1:3</option>
+                                <option>1:4</option>
+                                <option>1:5</option>
+                                <option>1:6</option>
+                                <option>1:7</option>
+                                <option>1:8</option>
+                                <option>1:9</option>
+                                <option>1:10</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Max Concurrent Trades</label>
+                            <input type="number" id="max-concurrent" placeholder="3" class="w-full px-4 py-3 border border-gray-300 rounded-lg input-focus">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl p-6 card-shadow">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6">💰 Position Sizing</h2>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Account Balance</label>
+                            <input type="number" id="account-balance" placeholder="10000" class="w-full px-4 py-3 border border-gray-300 rounded-lg input-focus">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Stop Loss (Pips)</label>
+                            <input type="number" id="stop-loss-pips" placeholder="20" class="w-full px-4 py-3 border border-gray-300 rounded-lg input-focus">
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h3 class="font-semibold text-gray-800 mb-2">Position Size Calculator</h3>
+                            <div id="position-size-result" class="text-lg font-bold text-blue-600">
+                                Enter values above to calculate
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Stop Loss Rules</label>
+                            <textarea id="stop-loss-rules" placeholder="e.g., Always place SL below/above key support/resistance levels" class="w-full px-4 py-3 border border-gray-300 rounded-lg input-focus h-20 resize-none"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-8 text-center">
+                <button onclick="saveRiskManagement()" class="gradient-bg text-white px-8 py-3 rounded-lg font-semibold hover:opacity-90 transition-all duration-200">Save Risk Management</button>
+            </div>
+        </div>
+
+        <!-- Trading Routine Tab -->
+        <div id="routine-tab" class="tab-content hidden">
+            <div class="grid lg:grid-cols-2 gap-8">
+                <div class="bg-white rounded-xl p-6 card-shadow">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6">🌅 Daily Routine</h2>
+                    <div class="space-y-4">
+                        <h3 class="text-lg font-semibold text-gray-700">Pre-Market Checklist</h3>
+                        <div class="space-y-2">
+                            <label class="flex items-center space-x-3">
+                                <input type="checkbox" class="rounded text-blue-600">
+                                <span>Check economic calendar for high-impact news</span>
+                            </label>
+                            <label class="flex items-center space-x-3">
+                                <input type="checkbox" class="rounded text-blue-600">
+                                <span>Review overnight market movements</span>
+                            </label>
+                            <label class="flex items-center space-x-3">
+                                <input type="checkbox" class="rounded text-blue-600">
+                                <span>Analyze key support/resistance levels</span>
+                            </label>
+                            <label class="flex items-center space-x-3">
+                                <input type="checkbox" class="rounded text-blue-600">
+                                <span>Set up charts and indicators</span>
+                            </label>
+                            <label class="flex items-center space-x-3">
+                                <input type="checkbox" class="rounded text-blue-600">
+                                <span>Review trading plan and goals</span>
+                            </label>
+                            <label class="flex items-center space-x-3">
+                                <input type="checkbox" class="rounded text-blue-600">
+                                <span>Check account balance and available margin</span>
+                            </label>
+                        </div>
+                        
+                        <h3 class="text-lg font-semibold text-gray-700 pt-4">Post-Market Checklist</h3>
+                        <div class="space-y-2">
+                            <label class="flex items-center space-x-3">
+                                <input type="checkbox" class="rounded text-blue-600">
+                                <span>Review all trades taken today</span>
+                            </label>
+                            <label class="flex items-center space-x-3">
+                                <input type="checkbox" class="rounded text-blue-600">
+                                <span>Update trade journal with details</span>
+                            </label>
+                            <label class="flex items-center space-x-3">
+                                <input type="checkbox" class="rounded text-blue-600">
+                                <span>Calculate daily P&L</span>
+                            </label>
+                            <label class="flex items-center space-x-3">
+                                <input type="checkbox" class="rounded text-blue-600">
+                                <span>Identify mistakes and improvements</span>
+                            </label>
+                            <label class="flex items-center space-x-3">
+                                <input type="checkbox" class="rounded text-blue-600">
+                                <span>Plan for tomorrow's trading session</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl p-6 card-shadow">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6">📅 Weekly Routine</h2>
+                    <div class="space-y-4">
+                        <h3 class="text-lg font-semibold text-gray-700">Weekly Review</h3>
+                        <div class="space-y-2">
+                            <label class="flex items-center space-x-3">
+                                <input type="checkbox" class="rounded text-blue-600">
+                                <span>Analyze weekly performance metrics</span>
+                            </label>
+                            <label class="flex items-center space-x-3">
+                                <input type="checkbox" class="rounded text-blue-600">
+                                <span>Review win rate and R:R ratio</span>
+                            </label>
+                            <label class="flex items-center space-x-3">
+                                <input type="checkbox" class="rounded text-blue-600">
+                                <span>Identify best and worst performing setups</span>
+                            </label>
+                            <label class="flex items-center space-x-3">
+                                <input type="checkbox" class="rounded text-blue-600">
+                                <span>Update trading strategy if needed</span>
+                            </label>
+                            <label class="flex items-center space-x-3">
+                                <input type="checkbox" class="rounded text-blue-600">
+                                <span>Plan next week's major economic events</span>
+                            </label>
+                        </div>
+
+                        <h3 class="text-lg font-semibold text-gray-700 pt-4">Market Preparation</h3>
+                        <div class="space-y-2">
+                            <label class="flex items-center space-x-3">
+                                <input type="checkbox" class="rounded text-blue-600">
+                                <span>Check upcoming economic calendar</span>
+                            </label>
+                            <label class="flex items-center space-x-3">
+                                <input type="checkbox" class="rounded text-blue-600">
+                                <span>Analyze weekly charts for trends</span>
+                            </label>
+                            <label class="flex items-center space-x-3">
+                                <input type="checkbox" class="rounded text-blue-600">
+                                <span>Update watchlist of currency pairs</span>
+                            </label>
+                            <label class="flex items-center space-x-3">
+                                <input type="checkbox" class="rounded text-blue-600">
+                                <span>Review and adjust risk parameters</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-8 text-center">
+                <button onclick="resetDailyChecklist()" class="bg-gray-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-gray-700 transition-all duration-200 mr-4">Reset Daily</button>
+                <button onclick="resetWeeklyChecklist()" class="gradient-bg text-white px-6 py-3 rounded-lg font-semibold hover:opacity-90 transition-all duration-200">Reset Weekly</button>
+            </div>
+        </div>
+
+        <!-- Trade Journal Tab -->
+        <div id="journal-tab" class="tab-content hidden">
+            <!-- Add New Trade Form -->
+            <div class="bg-white rounded-xl p-6 card-shadow mb-8">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">📝 Add New Trade</h2>
+                <form id="trade-form" class="space-y-6">
+                    <!-- Asset Type Selection -->
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <label class="block text-sm font-medium text-gray-700 mb-3">Asset Type</label>
+                        <div class="flex flex-wrap gap-4">
+                            <label class="flex items-center space-x-2">
+                                <input type="radio" name="asset-type" value="forex" checked onchange="updateAssetOptions()" class="text-blue-600">
+                                <span>💱 Forex</span>
+                            </label>
+                            <label class="flex items-center space-x-2">
+                                <input type="radio" name="asset-type" value="stocks" onchange="updateAssetOptions()" class="text-blue-600">
+                                <span>📈 Stocks</span>
+                            </label>
+                            <label class="flex items-center space-x-2">
+                                <input type="radio" name="asset-type" value="metals" onchange="updateAssetOptions()" class="text-blue-600">
+                                <span>🥇 Metals</span>
+                            <label class="flex items-center space-x-2">
+                                <input type="radio" name="asset-type" value="crypto" onchange="updateAssetOptions()" class="text-blue-600">
+                                <span>💹 crypto</span>
+                            </label>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <!-- Basic Trade Info -->
+                    <div class="grid md:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Date & Time</label>
+                            <input type="datetime-local" id="trade-datetime" class="w-full px-4 py-3 border border-gray-300 rounded-lg input-focus">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Asset/Pair</label>
+                            <select id="trade-pair" class="w-full px-4 py-3 border border-gray-300 rounded-lg input-focus">
+                                <option>EUR/USD</option>
+                                <option>GBP/USD</option>
+                                <option>USD/JPY</option>
+                                <option>AUD/USD</option>
+                                <option>USD/CAD</option>
+                                <option>USD/CHF</option>
+                                <option>NZD/USD</option>
+                                <option>EUR/GBP</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Direction</label>
+                            <select id="trade-direction" class="w-full px-4 py-3 border border-gray-300 rounded-lg input-focus">
+                                <option>Buy</option>
+                                <option>Sell</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <!-- Price and Size Info -->
+                    <div class="grid md:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Entry Price</label>
+                            <input type="number" id="trade-entry" step="0.00001" placeholder="1.12345" class="w-full px-4 py-3 border border-gray-300 rounded-lg input-focus">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Exit Price</label>
+                            <input type="number" id="trade-exit" step="0.00001" placeholder="1.12445" class="w-full px-4 py-3 border border-gray-300 rounded-lg input-focus">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Position Size</label>
+                            <input type="number" id="trade-size" step="0.01" placeholder="0.10" class="w-full px-4 py-3 border border-gray-300 rounded-lg input-focus">
+                        </div>
+                    </div>
+                    
+                    <!-- Risk Management -->
+                    <div class="grid md:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Stop Loss</label>
+                            <input type="number" id="trade-sl" step="0.00001" placeholder="1.12245" class="w-full px-4 py-3 border border-gray-300 rounded-lg input-focus">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Take Profit</label>
+                            <input type="number" id="trade-tp" step="0.00001" placeholder="1.12545" class="w-full px-4 py-3 border border-gray-300 rounded-lg input-focus">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Setup Type</label>
+                            <select id="trade-setup" class="w-full px-4 py-3 border border-gray-300 rounded-lg input-focus">
+                                <option>Breakout</option>
+                                <option>Pullback</option>
+                                <option>Trend Continuation</option>
+                                <option>Reversal</option>
+                                <option>Range Trading</option>
+                                <option>News Trading</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <!-- Analysis and Notes -->
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Reason for Entry</label>
+                            <textarea id="trade-reason" placeholder="Describe your analysis and reasoning..." class="w-full px-4 py-3 border border-gray-300 rounded-lg input-focus h-20 resize-none"></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Mistakes/Improvements</label>
+                            <textarea id="trade-mistakes" placeholder="What could be improved for next time..." class="w-full px-4 py-3 border border-gray-300 rounded-lg input-focus h-20 resize-none"></textarea>
+                        </div>
+                    </div>
+                    
+                    <!-- Trade Assessment -->
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Emotion/State of Mind</label>
+                            <select id="trade-emotion" class="w-full px-4 py-3 border border-gray-300 rounded-lg input-focus">
+                                <option>Confident</option>
+                                <option>Neutral</option>
+                                <option>Anxious</option>
+                                <option>Excited</option>
+                                <option>Frustrated</option>
+                                <option>Calm</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Trade Score</label>
+                            <select id="trade-score" class="w-full px-4 py-3 border border-gray-300 rounded-lg input-focus">
+                                <option>A - Excellent</option>
+                                <option>B - Good</option>
+                                <option>C - Average</option>
+                                <option>D - Poor</option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+                <div class="mt-6 text-center">
+                    <button onclick="addTrade()" class="gradient-bg text-white px-8 py-3 rounded-lg font-semibold hover:opacity-90 transition-all duration-200">Add Trade to Journal</button>
+                </div>
+            </div>
+
+            <!-- Trade History -->
+            <div class="bg-white rounded-xl p-6 card-shadow">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold text-gray-800">📊 Trade History</h2>
+                    <button onclick="exportTrades()" class="bg-green-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-green-700 transition-all duration-200">Export CSV</button>
+                </div>
+                <div id="trades-list" class="space-y-4">
+                    <div class="text-center text-gray-500 py-8">
+                        No trades recorded yet. Add your first trade above!
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reports Tab -->
+        <div id="reports-tab" class="tab-content hidden">
+            <div class="grid lg:grid-cols-3 gap-6 mb-8">
+                <div class="bg-white rounded-xl p-6 card-shadow">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">📊 Performance Tracking</h3>
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600">Monthly ROI:</span>
+                            <span id="monthly-roi" class="font-semibold text-blue-600">0%</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600">Quarterly ROI:</span>
+                            <span id="quarterly-roi" class="font-semibold text-purple-600">0%</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600">Annual ROI:</span>
+                            <span id="annual-roi" class="font-semibold text-green-600">0%</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600">Sharpe Ratio:</span>
+                            <span id="sharpe-ratio" class="font-semibold text-orange-600">0.00</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600">Max Drawdown:</span>
+                            <span id="max-drawdown-display" class="font-semibold text-red-600">0%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl p-6 card-shadow">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">📈 Trade Metrics</h3>
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600">Avg Win:</span>
+                            <span id="avg-win" class="font-semibold text-green-600">$0</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600">Avg Loss:</span>
+                            <span id="avg-loss" class="font-semibold text-red-600">$0</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600">Profit Factor:</span>
+                            <span id="profit-factor" class="font-semibold text-blue-600">0.00</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600">Best Trade:</span>
+                            <span id="best-trade" class="font-semibold text-green-600">$0</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600">Worst Trade:</span>
+                            <span id="worst-trade" class="font-semibold text-red-600">$0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl p-6 card-shadow">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">⏰ Time Analysis</h3>
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600">Avg Trade Duration:</span>
+                            <span id="avg-duration" class="font-semibold text-blue-600">0h</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600">Best Day:</span>
+                            <span id="best-day" class="font-semibold text-green-600">Monday</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600">Best Hour:</span>
+                            <span id="best-hour" class="font-semibold text-purple-600">9 AM</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600">Trading Days:</span>
+                            <span id="trading-days" class="font-semibold text-orange-600">0</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600">Trades/Day:</span>
+                            <span id="trades-per-day" class="font-semibold text-gray-600">0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detailed Reports -->
+            <div class="grid lg:grid-cols-2 gap-8">
+                <div class="bg-white rounded-xl p-6 card-shadow">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">📅 Monthly Performance Report</h3>
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center mb-4">
+                            <select id="report-month" class="px-4 py-2 border border-gray-300 rounded-lg">
+                                <option value="current">Current Month</option>
+                                <option value="last">Last Month</option>
+                                <option value="all">All Time</option>
+                            </select>
+                            <button onclick="generateMonthlyReport()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-all duration-200">Generate Report</button>
+                        </div>
+                        <div id="monthly-report-content" class="text-gray-500 text-center py-8">
+                            Click "Generate Report" to view monthly performance
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl p-6 card-shadow">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">🎯 Goal Progress Tracking</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-gray-600">Monthly Income Goal</span>
+                                <span id="monthly-goal-progress" class="font-semibold">0%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-3">
+                                <div id="monthly-progress-bar" class="bg-blue-600 h-3 rounded-full transition-all duration-500" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-gray-600">Win Rate Goal</span>
+                                <span id="winrate-goal-progress" class="font-semibold">0%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-3">
+                                <div id="winrate-progress-bar" class="bg-green-600 h-3 rounded-full transition-all duration-500" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-gray-600">Annual Growth Goal</span>
+                                <span id="annual-goal-progress" class="font-semibold">0%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-3">
+                                <div id="annual-progress-bar" class="bg-purple-600 h-3 rounded-full transition-all duration-500" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        <div class="mt-6 p-4 bg-gray-50 rounded-lg">
+                            <h4 class="font-semibold text-gray-800 mb-2">Goal Achievement Status</h4>
+                            <div id="goal-status" class="text-sm text-gray-600">
+                                Set your goals in the Trading Goals tab to track progress
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Export Options -->
+            <div class="mt-8 bg-white rounded-xl p-6 card-shadow">
+                <h3 class="text-xl font-bold text-gray-800 mb-4">📤 Export & Backup</h3>
+                <div class="grid md:grid-cols-4 gap-4">
+                    <button onclick="exportDetailedReport()" class="bg-green-600 text-white px-4 py-3 rounded-lg hover:bg-green-700 transition-all duration-200 font-medium">
+                        Export Detailed Report
+                    </button>
+                    <button onclick="exportTaxReport()" class="bg-purple-600 text-white px-4 py-3 rounded-lg hover:bg-purple-700 transition-all duration-200 font-medium">
+                        Export Tax Report
+                    </button>
+                    <button onclick="backupAllData()" class="bg-orange-600 text-white px-4 py-3 rounded-lg hover:bg-orange-700 transition-all duration-200 font-medium">
+                        Backup All Data
+                    </button>
+                    <button onclick="printReport()" class="bg-gray-600 text-white px-4 py-3 rounded-lg hover:bg-gray-700 transition-all duration-200 font-medium">
+                        Print Report
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Analytics Tab -->
+        <div id="analytics-tab" class="tab-content hidden">
+            <div class="grid lg:grid-cols-4 gap-6 mb-8">
+                <div class="stats-card rounded-xl p-6 text-center">
+                    <div class="text-3xl font-bold text-blue-600" id="total-trades">0</div>
+                    <div class="text-sm text-gray-600 mt-1">Total Trades</div>
+                </div>
+                <div class="stats-card rounded-xl p-6 text-center">
+                    <div class="text-3xl font-bold text-green-600" id="win-rate-display">0%</div>
+                    <div class="text-sm text-gray-600 mt-1">Win Rate</div>
+                </div>
+                <div class="stats-card rounded-xl p-6 text-center">
+                    <div class="text-3xl font-bold text-purple-600" id="total-pnl">$0</div>
+                    <div class="text-sm text-gray-600 mt-1">Total P&L</div>
+                </div>
+                <div class="stats-card rounded-xl p-6 text-center">
+                    <div class="text-3xl font-bold text-orange-600" id="avg-rr">0:0</div>
+                    <div class="text-sm text-gray-600 mt-1">Avg R:R</div>
+                </div>
+            </div>
+
+            <div class="grid lg:grid-cols-2 gap-8">
+                <div class="bg-white rounded-xl p-6 card-shadow">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">📈 Performance by Setup</h3>
+                    <div id="setup-performance" class="space-y-3">
+                        <div class="text-center text-gray-500 py-4">No data available yet</div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl p-6 card-shadow">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">💱 Performance by Pair</h3>
+                    <div id="pair-performance" class="space-y-3">
+                        <div class="text-center text-gray-500 py-4">No data available yet</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-8 bg-white rounded-xl p-6 card-shadow">
+                <h3 class="text-xl font-bold text-gray-800 mb-4">🎯 Monthly Progress</h3>
+                <div id="monthly-progress" class="text-center text-gray-500 py-4">
+                    No data available yet
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Database System
+        class ForexTradingDB {
+            constructor() {
+                this.dbName = 'ForexTradingDB';
+                this.version = 1;
+                this.db = null;
+                this.init();
+            }
+
+            async init() {
+                return new Promise((resolve, reject) => {
+                    const request = indexedDB.open(this.dbName, this.version);
+                    
+                    request.onerror = () => reject(request.error);
+                    request.onsuccess = () => {
+                        this.db = request.result;
+                        resolve(this.db);
+                    };
+                    
+                    request.onupgradeneeded = (event) => {
+                        const db = event.target.result;
+                        
+                        // Trades store
+                        if (!db.objectStoreNames.contains('trades')) {
+                            const tradesStore = db.createObjectStore('trades', { keyPath: 'id', autoIncrement: true });
+                            tradesStore.createIndex('datetime', 'datetime', { unique: false });
+                            tradesStore.createIndex('pair', 'pair', { unique: false });
+                            tradesStore.createIndex('setup', 'setup', { unique: false });
+                            tradesStore.createIndex('pnl', 'pnl', { unique: false });
+                        }
+                        
+                        // Goals store
+                        if (!db.objectStoreNames.contains('goals')) {
+                            db.createObjectStore('goals', { keyPath: 'id' });
+                        }
+                        
+                        // Strategy store
+                        if (!db.objectStoreNames.contains('strategy')) {
+                            const strategyStore = db.createObjectStore('strategy', { keyPath: 'id' });
+                            strategyStore.createIndex('type', 'type', { unique: false });
+                        }
+                        
+                        // Risk management store
+                        if (!db.objectStoreNames.contains('riskManagement')) {
+                            db.createObjectStore('riskManagement', { keyPath: 'id' });
+                        }
+                        
+                        // Routine store
+                        if (!db.objectStoreNames.contains('routine')) {
+                            db.createObjectStore('routine', { keyPath: 'id' });
+                        }
+                        
+                        // Analytics store
+                        if (!db.objectStoreNames.contains('analytics')) {
+                            const analyticsStore = db.createObjectStore('analytics', { keyPath: 'id' });
+                            analyticsStore.createIndex('date', 'date', { unique: false });
+                            analyticsStore.createIndex('type', 'type', { unique: false });
+                        }
+                        
+                        // Settings store
+                        if (!db.objectStoreNames.contains('settings')) {
+                            db.createObjectStore('settings', { keyPath: 'key' });
+                        }
+                        
+                        // Market data store
+                        if (!db.objectStoreNames.contains('marketData')) {
+                            const marketStore = db.createObjectStore('marketData', { keyPath: 'id', autoIncrement: true });
+                            marketStore.createIndex('pair', 'pair', { unique: false });
+                            marketStore.createIndex('timestamp', 'timestamp', { unique: false });
+                        }
+                    };
+                });
+            }
+
+            async add(storeName, data) {
+                return new Promise((resolve, reject) => {
+                    const transaction = this.db.transaction([storeName], 'readwrite');
+                    const store = transaction.objectStore(storeName);
+                    const request = store.add(data);
+                    
+                    request.onsuccess = () => resolve(request.result);
+                    request.onerror = () => reject(request.error);
+                });
+            }
+
+            async put(storeName, data) {
+                return new Promise((resolve, reject) => {
+                    const transaction = this.db.transaction([storeName], 'readwrite');
+                    const store = transaction.objectStore(storeName);
+                    const request = store.put(data);
+                    
+                    request.onsuccess = () => resolve(request.result);
+                    request.onerror = () => reject(request.error);
+                });
+            }
+
+            async get(storeName, key) {
+                return new Promise((resolve, reject) => {
+                    const transaction = this.db.transaction([storeName], 'readonly');
+                    const store = transaction.objectStore(storeName);
+                    const request = store.get(key);
+                    
+                    request.onsuccess = () => resolve(request.result);
+                    request.onerror = () => reject(request.error);
+                });
+            }
+
+            async getAll(storeName) {
+                return new Promise((resolve, reject) => {
+                    const transaction = this.db.transaction([storeName], 'readonly');
+                    const store = transaction.objectStore(storeName);
+                    const request = store.getAll();
+                    
+                    request.onsuccess = () => resolve(request.result);
+                    request.onerror = () => reject(request.error);
+                });
+            }
+
+            async delete(storeName, key) {
+                const transaction = this.db.transaction([storeName], 'readwrite');
+                const store = transaction.objectStore(storeName);
+                return store.delete(key);
+            }
+
+            async clear(storeName) {
+                const transaction = this.db.transaction([storeName], 'readwrite');
+                const store = transaction.objectStore(storeName);
+                return store.clear();
+            }
+
+            async getByIndex(storeName, indexName, value) {
+                const transaction = this.db.transaction([storeName], 'readonly');
+                const store = transaction.objectStore(storeName);
+                const index = store.index(indexName);
+                return index.getAll(value);
+            }
+
+            async count(storeName) {
+                const transaction = this.db.transaction([storeName], 'readonly');
+                const store = transaction.objectStore(storeName);
+                return store.count();
+            }
+        }
+
+        // Global variables
+        let db = new ForexTradingDB();
+        let trades = [];
+        let currentTab = 'goals';
+        let currentFontSize = 16;
+        let isDarkTheme = false;
+        let goals = {};
+        let strategy = {};
+        let riskManagement = {};
+        let routineData = {};
+        let analyticsData = {};
+        let marketFocus = {};
+        let selectedPairs = ['EUR/USD'];
+
+        // Helper functions for asset types
+        function getAssetTypeIcon(assetType) {
+            switch (assetType) {
+                case 'forex': return '💱';
+                case 'stocks': return '📈';
+                case 'metals': return '🥇';
+                case 'crypto': return '💹';
+                default: return '💱';
+            }
+        }
+
+        function getPipsLabel(assetType) {
+            switch (assetType) {
+                case 'forex': return 'pips';
+                case 'stocks': return 'pts';
+                case 'metals': return 'pts';
+                case 'crypto': return 'pts';
+                default: return 'pips';
+            }
+        }
+
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Wait for database to initialize
+            try {
+                await db.init();
+                console.log('Database initialized successfully');
+            } catch (error) {
+                console.error('Database initialization failed:', error);
+                showNotification('Database initialization failed. Some features may not work properly.', 'error');
+            }
+            
+            // Set current date/time for trade form
+            const now = new Date();
+            now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+            const datetimeInput = document.getElementById('trade-datetime');
+            if (datetimeInput) {
+                datetimeInput.value = now.toISOString().slice(0, 16);
+            }
+            
+            // Initialize asset options
+            updateAssetOptions();
+            
+            // Initialize theme and font size
+            await initializeTheme();
+            await initializeFontSize();
+            
+            // Load all saved data from database
+            await loadAllData();
+            
+            // Initialize displays
+            displayTrades();
+            updateAnalytics();
+            updateReportsData();
+            updateGoalProgress();
+            displaySelectedPairs();
+            loadRoutineChecklist();
+            
+            // Add event listeners for position size calculator
+            ['account-balance', 'risk-per-trade', 'stop-loss-pips'].forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.addEventListener('input', calculatePositionSize);
+                }
+            });
+            
+            // Add real-time form validation
+            addFormValidation();
+            
+            // Auto-save functionality
+            enableAutoSave();
+            
+            console.log('Forex Trading System initialized successfully');
+        });
+
+        // Theme functionality
+        async function toggleTheme() {
+            isDarkTheme = !isDarkTheme;
+            await db.put('settings', { key: 'darkTheme', value: isDarkTheme });
+            applyTheme();
+        }
+
+        async function initializeTheme() {
+            try {
+                const themeData = await db.get('settings', 'darkTheme');
+                if (themeData) {
+                    isDarkTheme = themeData.value;
+                }
+            } catch (error) {
+                console.log('No theme preference found, using default');
+            }
+            applyTheme();
+        }
+
+        function applyTheme() {
+            const body = document.body;
+            const themeIcon = document.getElementById('theme-icon');
+            const themeText = document.getElementById('theme-text');
+            
+            if (isDarkTheme) {
+                body.classList.add('dark-theme');
+                themeIcon.textContent = '☀️';
+                themeText.textContent = 'Light';
+            } else {
+                body.classList.remove('dark-theme');
+                themeIcon.textContent = '🌙';
+                themeText.textContent = 'Dark';
+            }
+        }
+
+        // Font size functionality
+        async function changeFontSize(action) {
+            if (action === 'increase' && currentFontSize < 24) {
+                currentFontSize += 2;
+            } else if (action === 'decrease' && currentFontSize > 12) {
+                currentFontSize -= 2;
+            }
+            
+            await db.put('settings', { key: 'fontSize', value: currentFontSize });
+            applyFontSize();
+        }
+
+        async function initializeFontSize() {
+            try {
+                const fontData = await db.get('settings', 'fontSize');
+                if (fontData) {
+                    currentFontSize = fontData.value;
+                }
+            } catch (error) {
+                console.log('No font size preference found, using default');
+            }
+            applyFontSize();
+        }
+
+        function applyFontSize() {
+            document.body.style.fontSize = currentFontSize + 'px';
+        }
+
+        // Currency pair management
+        async function addPair() {
+            const pairsContainer = document.getElementById('selected-pairs');
+            const newPairDiv = document.createElement('div');
+            newPairDiv.className = 'pair-selection flex items-center justify-between p-3 border rounded-lg';
+            newPairDiv.innerHTML = `
+                <div class="flex items-center space-x-3">
+                    <select class="pair-select font-medium border rounded px-2 py-1" onchange="savePairSelection()">
+                        <option>EUR/USD</option>
+                        <option>GBP/USD</option>
+                        <option>USD/JPY</option>
+                        <option>AUD/USD</option>
+                        <option>USD/CAD</option>
+                        <option>USD/CHF</option>
+                        <option>NZD/USD</option>
+                        <option>EUR/GBP</option>
+                        <option>EUR/JPY</option>
+                        <option>GBP/JPY</option>
+                        <option>AUD/JPY</option>
+                        <option>CAD/JPY</option>
+                        <option>CHF/JPY</option>
+                        <option>EUR/AUD</option>
+                        <option>EUR/CAD</option>
+                        <option>EUR/CHF</option>
+                        <option>GBP/AUD</option>
+                        <option>GBP/CAD</option>
+                        <option>GBP/CHF</option>
+                    </select>
+                    <div class="text-sm text-gray-600">
+                        <span class="spread-info">Spread: ~1.2 pips</span>
+                    </div>
+                </div>
+                <button onclick="removePair(this)" class="text-red-600 hover:text-red-800 text-sm font-medium px-2 py-1 rounded hover:bg-red-50 transition-all duration-200">Remove</button>
+            `;
+            pairsContainer.appendChild(newPairDiv);
+            await savePairSelection();
+        }
+
+        async function removePair(button) {
+            button.closest('.pair-selection').remove();
+            await savePairSelection();
+        }
+
+        async function savePairSelection() {
+            const pairSelects = document.querySelectorAll('.pair-select');
+            selectedPairs = Array.from(pairSelects).map(select => select.value);
+            
+            await db.put('strategy', {
+                id: 'selectedPairs',
+                type: 'pairs',
+                pairs: selectedPairs,
+                timestamp: new Date().toISOString()
+            });
+            
+            updatePairInfo();
+        }
+
+        function updatePairInfo() {
+            const pairInfos = {
+                'EUR/USD': { spread: '1.2', volatility: 'Medium', session: 'London/NY' },
+                'GBP/USD': { spread: '1.5', volatility: 'High', session: 'London/NY' },
+                'USD/JPY': { spread: '1.0', volatility: 'Medium', session: 'Tokyo/NY' },
+                'AUD/USD': { spread: '1.8', volatility: 'Medium', session: 'Sydney/NY' },
+                'USD/CAD': { spread: '2.0', volatility: 'Medium', session: 'NY' },
+                'USD/CHF': { spread: '1.8', volatility: 'Low', session: 'London/NY' },
+                'NZD/USD': { spread: '2.5', volatility: 'High', session: 'Sydney/NY' },
+                'EUR/GBP': { spread: '2.0', volatility: 'Low', session: 'London' },
+                'EUR/JPY': { spread: '1.8', volatility: 'High', session: 'Tokyo/London' },
+                'GBP/JPY': { spread: '2.5', volatility: 'Very High', session: 'Tokyo/London' }
+            };
+
+            document.querySelectorAll('.pair-selection').forEach(pairDiv => {
+                const select = pairDiv.querySelector('.pair-select');
+                const spreadInfo = pairDiv.querySelector('.spread-info');
+                const pair = select.value;
+                const info = pairInfos[pair] || { spread: '2.0', volatility: 'Medium', session: 'Various' };
+                
+                spreadInfo.textContent = `Spread: ~${info.spread} pips | ${info.volatility} Vol`;
+            });
+        }
+
+        async function displaySelectedPairs() {
+            try {
+                const pairData = await db.get('strategy', 'selectedPairs');
+                if (pairData && pairData.pairs) {
+                    selectedPairs = pairData.pairs;
+                    
+                    const pairsContainer = document.getElementById('selected-pairs');
+                    pairsContainer.innerHTML = '';
+                    
+                    selectedPairs.forEach(pair => {
+                        const pairDiv = document.createElement('div');
+                        pairDiv.className = 'pair-selection flex items-center justify-between p-3 border rounded-lg';
+                        pairDiv.innerHTML = `
+                            <div class="flex items-center space-x-3">
+                                <select class="pair-select font-medium border rounded px-2 py-1" onchange="savePairSelection()">
+                                    <option ${pair === 'EUR/USD' ? 'selected' : ''}>EUR/USD</option>
+                                    <option ${pair === 'GBP/USD' ? 'selected' : ''}>GBP/USD</option>
+                                    <option ${pair === 'USD/JPY' ? 'selected' : ''}>USD/JPY</option>
+                                    <option ${pair === 'AUD/USD' ? 'selected' : ''}>AUD/USD</option>
+                                    <option ${pair === 'USD/CAD' ? 'selected' : ''}>USD/CAD</option>
+                                    <option ${pair === 'USD/CHF' ? 'selected' : ''}>USD/CHF</option>
+                                    <option ${pair === 'NZD/USD' ? 'selected' : ''}>NZD/USD</option>
+                                    <option ${pair === 'EUR/GBP' ? 'selected' : ''}>EUR/GBP</option>
+                                    <option ${pair === 'EUR/JPY' ? 'selected' : ''}>EUR/JPY</option>
+                                    <option ${pair === 'GBP/JPY' ? 'selected' : ''}>GBP/JPY</option>
+                                </select>
+                                <div class="text-sm text-gray-600">
+                                    <span class="spread-info">Spread: ~1.2 pips</span>
+                                </div>
+                            </div>
+                            <button onclick="removePair(this)" class="text-red-600 hover:text-red-800 text-sm font-medium px-2 py-1 rounded hover:bg-red-50 transition-all duration-200">Remove</button>
+                        `;
+                        pairsContainer.appendChild(pairDiv);
+                    });
+                    
+                    updatePairInfo();
+                }
+            } catch (error) {
+                console.log('No saved pairs found, using default');
+            }
+        }
+
+        // Tab switching
+        function showTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.add('hidden');
+            });
+            
+            // Remove active class from all buttons
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('tab-active');
+                btn.classList.add('bg-gray-100', 'text-gray-700', 'hover:bg-gray-200');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabName + '-tab').classList.remove('hidden');
+            
+            // Add active class to selected button
+            const activeBtn = document.getElementById('tab-' + tabName);
+            activeBtn.classList.add('tab-active');
+            activeBtn.classList.remove('bg-gray-100', 'text-gray-700', 'hover:bg-gray-200');
+            
+            currentTab = tabName;
+        }
+
+        // Position size calculator
+        function calculatePositionSize() {
+            const balance = parseFloat(document.getElementById('account-balance').value) || 0;
+            const riskPercent = parseFloat(document.getElementById('risk-per-trade').value) || 0;
+            const stopLossPips = parseFloat(document.getElementById('stop-loss-pips').value) || 0;
+            
+            if (balance && riskPercent && stopLossPips) {
+                const riskAmount = balance * (riskPercent / 100);
+                const pipValue = 10; // Assuming standard lot for major pairs
+                const positionSize = (riskAmount / (stopLossPips * pipValue)).toFixed(2);
+                
+                document.getElementById('position-size-result').innerHTML = `
+                    <div>Recommended Position Size: <span class="text-blue-600">${positionSize} lots</span></div>
+                    <div class="text-sm text-gray-600 mt-1">Risk Amount: $${riskAmount.toFixed(2)}</div>
+                `;
+            }
+        }
+
+        // Update asset options based on selection
+        function updateAssetOptions() {
+            const assetType = document.querySelector('input[name="asset-type"]:checked').value;
+            const pairSelect = document.getElementById('trade-pair');
+            const sizeLabel = document.querySelector('label[for="trade-size"]') || document.querySelector('input#trade-size').previousElementSibling;
+            
+            // Clear existing options
+            pairSelect.innerHTML = '';
+            
+            if (assetType === 'forex') {
+                const forexPairs = [
+                    'EUR/USD', 'GBP/USD', 'USD/JPY', 'AUD/USD', 'USD/CAD', 'USD/CHF', 'NZD/USD',
+                    'EUR/GBP', 'EUR/JPY', 'GBP/JPY', 'AUD/JPY', 'CAD/JPY', 'CHF/JPY',
+                    'EUR/AUD', 'EUR/CAD', 'EUR/CHF', 'GBP/AUD', 'GBP/CAD', 'GBP/CHF'
+                ];
+                forexPairs.forEach(pair => {
+                    const option = document.createElement('option');
+                    option.value = pair;
+                    option.textContent = pair;
+                    pairSelect.appendChild(option);
+                });
+                sizeLabel.textContent = 'Position Size (Lots)';
+            } else if (assetType === 'stocks') {
+                const stocks = [
+                    'AAPL', 'MSFT', 'GOOGL', 'AMZN', 'TSLA', 'META', 'NVDA', 'NFLX',
+                    'AMD', 'INTC', 'CRM', 'ORCL', 'ADBE', 'PYPL', 'UBER', 'LYFT',
+                    'SPY', 'QQQ', 'IWM', 'DIA', 'VTI', 'VOO'
+                ];
+                stocks.forEach(stock => {
+                    const option = document.createElement('option');
+                    option.value = stock;
+                    option.textContent = stock;
+                    pairSelect.appendChild(option);
+                });
+                sizeLabel.textContent = 'Position Size (Shares)';
+            } else if (assetType === 'metals') {
+                const metals = [
+                    'XAU/USD (Gold)', 'XAG/USD (Silver)', 'XPD/USD (Palladium)', 'XPT/USD (Platinum)',
+                    'GOLD', 'SILVER', 'GLD', 'SLV', 'PALL', 'PPLT'
+                ];
+                metals.forEach(metal => {
+                    const option = document.createElement('option');
+                    option.value = metal;
+                    option.textContent = metal;
+                    pairSelect.appendChild(option);
+                });
+                sizeLabel.textContent = 'Position Size (Oz/Lots)';
+            } else if (assetType === 'crypto') {
+                const crypto = [
+                    'BTC/USD (Bitcoin)', 'ETH/USD (Etherium)'
+                ];
+                crypto.forEach(crypto=> {
+                    const option = document.createElement('option');
+                    option.value = crypto;
+                    option.textContent = crypto;
+                    pairSelect.appendChild(option);
+                });
+                sizeLabel.textContent = 'Position Size (Oz/Lots)';
+            }
+        }
+
+        // Add trade to journal
+        async function addTrade() {
+            // Validate form data
+            const requiredFields = ['trade-datetime', 'trade-pair', 'trade-direction', 'trade-entry', 'trade-exit', 'trade-size'];
+            const missingFields = requiredFields.filter(field => !document.getElementById(field).value);
+            
+            if (missingFields.length > 0) {
+                showNotification('Please fill in all required fields: ' + missingFields.map(f => f.replace('trade-', '')).join(', '), 'error');
+                return;
+            }
+
+            const assetType = document.querySelector('input[name="asset-type"]:checked').value;
+            
+            const trade = {
+                datetime: document.getElementById('trade-datetime').value,
+                pair: document.getElementById('trade-pair').value,
+                assetType: assetType,
+                direction: document.getElementById('trade-direction').value,
+                entry: parseFloat(document.getElementById('trade-entry').value),
+                exit: parseFloat(document.getElementById('trade-exit').value),
+                size: parseFloat(document.getElementById('trade-size').value),
+                stopLoss: parseFloat(document.getElementById('trade-sl').value) || null,
+                takeProfit: parseFloat(document.getElementById('trade-tp').value) || null,
+                setup: document.getElementById('trade-setup').value,
+                reason: document.getElementById('trade-reason').value,
+                emotion: document.getElementById('trade-emotion').value,
+                mistakes: document.getElementById('trade-mistakes').value,
+                score: document.getElementById('trade-score').value,
+                createdAt: new Date().toISOString()
+            };
+
+            // Calculate pips and P&L based on asset type
+            let pips = 0;
+            let pnl = 0;
+            
+            if (assetType === 'forex') {
+                const pipMultiplier = trade.pair.includes('JPY') ? 0.01 : 0.0001;
+                
+                if (trade.direction === 'Buy') {
+                    pips = (trade.exit - trade.entry) / pipMultiplier;
+                } else {
+                    pips = (trade.entry - trade.exit) / pipMultiplier;
+                }
+                
+                const pipValue = trade.size * 10; // Standard forex calculation
+                pnl = pips * pipValue;
+            } else if (assetType === 'stocks') {
+                // For stocks, calculate based on price difference and shares
+                if (trade.direction === 'Buy') {
+                    pnl = (trade.exit - trade.entry) * trade.size;
+                } else {
+                    pnl = (trade.entry - trade.exit) * trade.size;
+                }
+                pips = pnl; // For stocks, we'll use P&L as the "pips" equivalent
+            } else if (assetType === 'metals') {
+                // For metals, similar to forex but different multiplier
+                if (trade.direction === 'Buy') {
+                    pnl = (trade.exit - trade.entry) * trade.size;
+                } else {
+                    pnl = (trade.entry - trade.exit) * trade.size;
+                }
+                pips = pnl / trade.size; // Price difference per unit
+            }
+            
+            trade.pips = Math.round(pips * 10) / 10;
+            trade.pnl = Math.round(pnl * 100) / 100;
+
+            // Calculate additional metrics
+            trade.riskReward = calculateRiskReward(trade);
+            trade.duration = calculateTradeDuration(trade);
+            trade.commission = calculateCommission(trade);
+            trade.netPnl = trade.pnl - trade.commission;
+
+            try {
+                // Save to database
+                await db.add('trades', trade);
+                
+                // Update local array
+                await loadTrades();
+                
+                // Reset form
+                document.getElementById('trade-form').reset();
+                const now = new Date();
+                now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+                document.getElementById('trade-datetime').value = now.toISOString().slice(0, 16);
+                
+                // Reset to forex and update options
+                document.querySelector('input[name="asset-type"][value="forex"]').checked = true;
+                updateAssetOptions();
+                
+                // Update displays
+                displayTrades();
+                updateAnalytics();
+                updateReportsData();
+                
+                // Store analytics data
+                await storeAnalyticsData(trade);
+                
+                showNotification('Trade added successfully!', 'success');
+            } catch (error) {
+                console.error('Error adding trade:', error);
+                showNotification('Error adding trade. Please try again.', 'error');
+            }
+        }
+
+        function calculateRiskReward(trade) {
+            if (!trade.stopLoss || !trade.takeProfit) return null;
+            
+            const pipMultiplier = trade.pair.includes('JPY') ? 0.01 : 0.0001;
+            let risk, reward;
+            
+            if (trade.direction === 'Buy') {
+                risk = (trade.entry - trade.stopLoss) / pipMultiplier;
+                reward = (trade.takeProfit - trade.entry) / pipMultiplier;
+            } else {
+                risk = (trade.stopLoss - trade.entry) / pipMultiplier;
+                reward = (trade.entry - trade.takeProfit) / pipMultiplier;
+            }
+            
+            return risk > 0 ? Math.round((reward / risk) * 100) / 100 : null;
+        }
+
+        function calculateTradeDuration(trade) {
+            // For now, return null as we don't have exit time
+            // This could be enhanced to track actual trade duration
+            return null;
+        }
+
+        function calculateCommission(trade) {
+            // Simple commission calculation - can be customized
+            const commissionRate = 0.00007; // 7 cents per 1000 units
+            return Math.round(trade.size * 100000 * commissionRate * 100) / 100;
+        }
+
+        async function storeAnalyticsData(trade) {
+            const analyticsEntry = {
+                date: new Date(trade.datetime).toDateString(),
+                type: 'trade',
+                pair: trade.pair,
+                setup: trade.setup,
+                pnl: trade.pnl,
+                pips: trade.pips,
+                emotion: trade.emotion,
+                score: trade.score,
+                timestamp: new Date().toISOString()
+            };
+            
+            await db.add('analytics', analyticsEntry);
+        }
+
+        // Display trades
+        function displayTrades() {
+            const tradesList = document.getElementById('trades-list');
+            
+            if (trades.length === 0) {
+                tradesList.innerHTML = '<div class="text-center text-gray-500 py-8">No trades recorded yet. Add your first trade above!</div>';
+                return;
+            }
+            
+            tradesList.innerHTML = trades.map(trade => `
+                <div class="border rounded-lg p-4 ${trade.pnl >= 0 ? 'trade-positive' : 'trade-negative'}">
+                    <div class="flex justify-between items-start mb-3">
+                        <div>
+                            <div class="font-semibold text-lg">${trade.pair} - ${trade.direction}</div>
+                            <div class="text-sm text-gray-600">${new Date(trade.datetime).toLocaleString()}</div>
+                            <div class="text-xs text-blue-600 font-medium">${getAssetTypeIcon(trade.assetType)} ${(trade.assetType || 'forex').toUpperCase()}</div>
+                        </div>
+                        <div class="text-right">
+                            <div class="font-bold text-lg ${trade.pnl >= 0 ? 'text-green-600' : 'text-red-600'}">
+                                ${trade.pnl >= 0 ? '+' : ''}$${trade.pnl.toFixed(2)}
+                            </div>
+                            <div class="text-sm ${trade.pips >= 0 ? 'text-green-600' : 'text-red-600'}">
+                                ${trade.pips >= 0 ? '+' : ''}${trade.pips.toFixed(1)} ${getPipsLabel(trade.assetType)}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4 text-sm">
+                        <div><strong>Entry:</strong> ${trade.entry}</div>
+                        <div><strong>Exit:</strong> ${trade.exit}</div>
+                        <div><strong>Size:</strong> ${trade.size} lots</div>
+                        <div><strong>Setup:</strong> ${trade.setup}</div>
+                        <div><strong>SL:</strong> ${trade.stopLoss}</div>
+                        <div><strong>TP:</strong> ${trade.takeProfit}</div>
+                        <div><strong>Emotion:</strong> ${trade.emotion}</div>
+                        <div><strong>Score:</strong> ${trade.score}</div>
+                    </div>
+                    ${trade.reason ? `<div class="mt-3 text-sm"><strong>Reason:</strong> ${trade.reason}</div>` : ''}
+                    ${trade.mistakes ? `<div class="mt-2 text-sm"><strong>Improvements:</strong> ${trade.mistakes}</div>` : ''}
+                    <div class="mt-3 flex justify-end">
+                        <button onclick="deleteTrade(${trade.id})" class="text-red-600 hover:text-red-800 text-sm font-medium">Delete Trade</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Delete trade
+        async function deleteTrade(id) {
+            if (confirm('Are you sure you want to delete this trade?')) {
+                try {
+                    await db.delete('trades', id);
+                    await loadTrades();
+                    displayTrades();
+                    updateAnalytics();
+                    updateReportsData();
+                    showNotification('Trade deleted successfully!', 'success');
+                } catch (error) {
+                    console.error('Error deleting trade:', error);
+                    showNotification('Error deleting trade. Please try again.', 'error');
+                }
+            }
+        }
+
+        // Update analytics
+        function updateAnalytics() {
+            if (trades.length === 0) {
+                document.getElementById('total-trades').textContent = '0';
+                document.getElementById('win-rate-display').textContent = '0%';
+                document.getElementById('total-pnl').textContent = '$0';
+                document.getElementById('avg-rr').textContent = '0:0';
+                return;
+            }
+
+            const totalTrades = trades.length;
+            const winningTrades = trades.filter(t => t.pnl > 0).length;
+            const winRate = ((winningTrades / totalTrades) * 100).toFixed(1);
+            const totalPnL = trades.reduce((sum, t) => sum + t.pnl, 0);
+
+            document.getElementById('total-trades').textContent = totalTrades;
+            document.getElementById('win-rate-display').textContent = winRate + '%';
+            document.getElementById('total-pnl').textContent = '$' + totalPnL.toFixed(2);
+
+            // Performance by setup
+            const setupStats = {};
+            trades.forEach(trade => {
+                if (!setupStats[trade.setup]) {
+                    setupStats[trade.setup] = { wins: 0, total: 0, pnl: 0 };
+                }
+                setupStats[trade.setup].total++;
+                setupStats[trade.setup].pnl += trade.pnl;
+                if (trade.pnl > 0) setupStats[trade.setup].wins++;
+            });
+
+            const setupHtml = Object.entries(setupStats).map(([setup, stats]) => {
+                const winRate = ((stats.wins / stats.total) * 100).toFixed(1);
+                return `
+                    <div class="flex justify-between items-center py-2 border-b">
+                        <span class="font-medium">${setup}</span>
+                        <div class="text-right">
+                            <div class="text-sm">${winRate}% (${stats.wins}/${stats.total})</div>
+                            <div class="text-sm ${stats.pnl >= 0 ? 'text-green-600' : 'text-red-600'}">
+                                $${stats.pnl.toFixed(2)}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            document.getElementById('setup-performance').innerHTML = setupHtml || '<div class="text-center text-gray-500 py-4">No data available yet</div>';
+
+            // Performance by pair
+            const pairStats = {};
+            trades.forEach(trade => {
+                if (!pairStats[trade.pair]) {
+                    pairStats[trade.pair] = { wins: 0, total: 0, pnl: 0 };
+                }
+                pairStats[trade.pair].total++;
+                pairStats[trade.pair].pnl += trade.pnl;
+                if (trade.pnl > 0) pairStats[trade.pair].wins++;
+            });
+
+            const pairHtml = Object.entries(pairStats).map(([pair, stats]) => {
+                const winRate = ((stats.wins / stats.total) * 100).toFixed(1);
+                return `
+                    <div class="flex justify-between items-center py-2 border-b">
+                        <span class="font-medium">${pair}</span>
+                        <div class="text-right">
+                            <div class="text-sm">${winRate}% (${stats.wins}/${stats.total})</div>
+                            <div class="text-sm ${stats.pnl >= 0 ? 'text-green-600' : 'text-red-600'}">
+                                $${stats.pnl.toFixed(2)}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            document.getElementById('pair-performance').innerHTML = pairHtml || '<div class="text-center text-gray-500 py-4">No data available yet</div>';
+        }
+
+        // Export trades to CSV
+        async function exportTrades() {
+            if (trades.length === 0) {
+                showNotification('No trades to export!', 'warning');
+                return;
+            }
+
+            const headers = ['Date', 'Pair', 'Direction', 'Entry', 'Exit', 'Size', 'Stop Loss', 'Take Profit', 'Pips', 'P&L', 'Net P&L', 'Commission', 'R:R', 'Setup', 'Reason', 'Emotion', 'Score', 'Mistakes'];
+            const csvContent = [
+                headers.join(','),
+                ...trades.map(trade => [
+                    new Date(trade.datetime).toLocaleString(),
+                    trade.pair,
+                    trade.direction,
+                    trade.entry,
+                    trade.exit,
+                    trade.size,
+                    trade.stopLoss || '',
+                    trade.takeProfit || '',
+                    trade.pips,
+                    trade.pnl,
+                    trade.netPnl || trade.pnl,
+                    trade.commission || 0,
+                    trade.riskReward || '',
+                    trade.setup,
+                    `"${trade.reason || ''}"`,
+                    trade.emotion,
+                    trade.score,
+                    `"${trade.mistakes || ''}"`
+                ].join(','))
+            ].join('\n');
+
+            downloadCSV(csvContent, 'forex_trades_export.csv');
+            showNotification('Trades exported successfully!', 'success');
+        }
+
+        // Save functions
+        async function saveGoals() {
+            const goalsData = {
+                id: 'main',
+                annualIncome: document.getElementById('annual-income').value,
+                growthTarget: document.getElementById('growth-target').value,
+                targetAccount: document.getElementById('target-account').value,
+                timeline: document.getElementById('timeline').value,
+                monthlyIncome: document.getElementById('monthly-income').value,
+                weeklyProfit: document.getElementById('weekly-profit').value,
+                maxTrades: document.getElementById('max-trades').value,
+                winRate: document.getElementById('win-rate').value,
+                updatedAt: new Date().toISOString()
+            };
+            
+            try {
+                await db.put('goals', goalsData);
+                goals = goalsData;
+                updateGoalProgress();
+                showNotification('Goals saved successfully!', 'success');
+            } catch (error) {
+                console.error('Error saving goals:', error);
+                showNotification('Error saving goals. Please try again.', 'error');
+            }
+        }
+
+        async function saveStrategy() {
+            // Get timeframes
+            const timeframes = [];
+            document.querySelectorAll('#strategy-tab input[type="checkbox"]:checked').forEach(checkbox => {
+                timeframes.push(checkbox.nextElementSibling.textContent);
+            });
+
+            const strategyData = {
+                id: 'main',
+                tradingStyle: document.getElementById('trading-style').value,
+                currencyPairs: document.getElementById('currency-pairs').value,
+                indicators: document.getElementById('indicators').value,
+                entryStrategies: document.getElementById('entry-strategies').value,
+                exitStrategies: document.getElementById('exit-strategies').value,
+                timeframes: timeframes,
+                updatedAt: new Date().toISOString()
+            };
+
+            // Save market focus data
+            const marketFocusData = {
+                id: 'marketFocus',
+                volatilityPref: document.getElementById('volatility-pref').value,
+                liquidityPref: document.getElementById('liquidity-pref').value,
+                timezonePref: document.getElementById('timezone-pref').value,
+                pairReasoning: document.getElementById('pair-reasoning').value,
+                updatedAt: new Date().toISOString()
+            };
+            
+            try {
+                await Promise.all([
+                    db.put('strategy', strategyData),
+                    db.put('strategy', marketFocusData)
+                ]);
+                
+                strategy = strategyData;
+                marketFocus = marketFocusData;
+                showNotification('Strategy saved successfully!', 'success');
+            } catch (error) {
+                console.error('Error saving strategy:', error);
+                showNotification('Error saving strategy. Please try again.', 'error');
+            }
+        }
+
+        async function saveRiskManagement() {
+            const riskData = {
+                id: 'main',
+                riskPerTrade: document.getElementById('risk-per-trade').value,
+                maxDrawdown: document.getElementById('max-drawdown').value,
+                riskReward: document.getElementById('risk-reward').value,
+                maxConcurrent: document.getElementById('max-concurrent').value,
+                accountBalance: document.getElementById('account-balance').value,
+                stopLossPips: document.getElementById('stop-loss-pips').value,
+                stopLossRules: document.getElementById('stop-loss-rules').value,
+                updatedAt: new Date().toISOString()
+            };
+            
+            try {
+                await db.put('riskManagement', riskData);
+                riskManagement = riskData;
+                calculatePositionSize();
+                showNotification('Risk management settings saved successfully!', 'success');
+            } catch (error) {
+                console.error('Error saving risk management:', error);
+                showNotification('Error saving risk management. Please try again.', 'error');
+            }
+        }
+
+        // Load all data from database
+        async function loadAllData() {
+            await Promise.all([
+                loadTrades(),
+                loadGoals(),
+                loadStrategy(),
+                loadRiskManagement(),
+                loadRoutineData(),
+                loadMarketFocus()
+            ]);
+        }
+
+        async function loadTrades() {
+            try {
+                trades = await db.getAll('trades');
+                trades.sort((a, b) => new Date(b.datetime) - new Date(a.datetime));
+            } catch (error) {
+                console.log('No trades found');
+                trades = [];
+            }
+        }
+
+        async function loadGoals() {
+            try {
+                const goalsData = await db.get('goals', 'main');
+                if (goalsData) {
+                    goals = goalsData;
+                    populateGoalsForm(goals);
+                }
+            } catch (error) {
+                console.log('No goals found');
+            }
+        }
+
+        async function loadStrategy() {
+            try {
+                const strategyData = await db.get('strategy', 'main');
+                if (strategyData) {
+                    strategy = strategyData;
+                    populateStrategyForm(strategy);
+                }
+            } catch (error) {
+                console.log('No strategy found');
+            }
+        }
+
+        async function loadRiskManagement() {
+            try {
+                const riskData = await db.get('riskManagement', 'main');
+                if (riskData) {
+                    riskManagement = riskData;
+                    populateRiskForm(riskManagement);
+                    calculatePositionSize();
+                }
+            } catch (error) {
+                console.log('No risk management data found');
+            }
+        }
+
+        async function loadRoutineData() {
+            try {
+                const routineDataFromDB = await db.get('routine', 'main');
+                if (routineDataFromDB) {
+                    routineData = routineDataFromDB;
+                }
+            } catch (error) {
+                console.log('No routine data found');
+            }
+        }
+
+        async function loadMarketFocus() {
+            try {
+                const marketData = await db.get('strategy', 'marketFocus');
+                if (marketData) {
+                    marketFocus = marketData;
+                    populateMarketFocusForm(marketFocus);
+                }
+            } catch (error) {
+                console.log('No market focus data found');
+            }
+        }
+
+        function populateGoalsForm(data) {
+            const fieldMap = {
+                'annual-income': 'annualIncome',
+                'growth-target': 'growthTarget',
+                'target-account': 'targetAccount',
+                'timeline': 'timeline',
+                'monthly-income': 'monthlyIncome',
+                'weekly-profit': 'weeklyProfit',
+                'max-trades': 'maxTrades',
+                'win-rate': 'winRate'
+            };
+
+            Object.entries(fieldMap).forEach(([elementId, dataKey]) => {
+                const element = document.getElementById(elementId);
+                if (element && data[dataKey]) {
+                    element.value = data[dataKey];
+                }
+            });
+        }
+
+        function populateStrategyForm(data) {
+            const fieldMap = {
+                'trading-style': 'tradingStyle',
+                'currency-pairs': 'currencyPairs',
+                'indicators': 'indicators',
+                'entry-strategies': 'entryStrategies',
+                'exit-strategies': 'exitStrategies'
+            };
+
+            Object.entries(fieldMap).forEach(([elementId, dataKey]) => {
+                const element = document.getElementById(elementId);
+                if (element && data[dataKey]) {
+                    element.value = data[dataKey];
+                }
+            });
+
+            // Handle checkboxes for timeframes
+            if (data.timeframes) {
+                data.timeframes.forEach(timeframe => {
+                    const checkbox = document.querySelector(`input[type="checkbox"][value="${timeframe}"]`);
+                    if (checkbox) checkbox.checked = true;
+                });
+            }
+        }
+
+        function populateRiskForm(data) {
+            const fieldMap = {
+                'risk-per-trade': 'riskPerTrade',
+                'max-drawdown': 'maxDrawdown',
+                'risk-reward': 'riskReward',
+                'max-concurrent': 'maxConcurrent',
+                'account-balance': 'accountBalance',
+                'stop-loss-pips': 'stopLossPips',
+                'stop-loss-rules': 'stopLossRules'
+            };
+
+            Object.entries(fieldMap).forEach(([elementId, dataKey]) => {
+                const element = document.getElementById(elementId);
+                if (element && data[dataKey]) {
+                    element.value = data[dataKey];
+                }
+            });
+        }
+
+        function populateMarketFocusForm(data) {
+            const fieldMap = {
+                'volatility-pref': 'volatilityPref',
+                'liquidity-pref': 'liquidityPref',
+                'timezone-pref': 'timezonePref',
+                'pair-reasoning': 'pairReasoning'
+            };
+
+            Object.entries(fieldMap).forEach(([elementId, dataKey]) => {
+                const element = document.getElementById(elementId);
+                if (element && data[dataKey]) {
+                    element.value = data[dataKey];
+                }
+            });
+        }
+
+        async function loadRoutineChecklist() {
+            try {
+                const routineState = await db.get('routine', 'checklist');
+                if (routineState && routineState.checkboxes) {
+                    const checkboxes = document.querySelectorAll('#routine-tab input[type="checkbox"]');
+                    checkboxes.forEach((checkbox, index) => {
+                        if (routineState.checkboxes[index] !== undefined) {
+                            checkbox.checked = routineState.checkboxes[index];
+                        }
+                    });
+                }
+            } catch (error) {
+                console.log('No routine checklist state found');
+            }
+        }
+
+        // Reset checklists
+        async function resetDailyChecklist() {
+            document.querySelectorAll('#routine-tab input[type="checkbox"]').forEach((checkbox, index) => {
+                if (index < 11) checkbox.checked = false; // First 11 are daily
+            });
+            await saveRoutineChecklist();
+            showNotification('Daily checklist reset!', 'success');
+        }
+
+        async function resetWeeklyChecklist() {
+            document.querySelectorAll('#routine-tab input[type="checkbox"]').forEach((checkbox, index) => {
+                if (index >= 11) checkbox.checked = false; // Rest are weekly
+            });
+            await saveRoutineChecklist();
+            showNotification('Weekly checklist reset!', 'success');
+        }
+
+        async function saveRoutineChecklist() {
+            const checkboxes = document.querySelectorAll('#routine-tab input[type="checkbox"]');
+            const checkboxStates = Array.from(checkboxes).map(cb => cb.checked);
+            
+            const routineState = {
+                id: 'checklist',
+                checkboxes: checkboxStates,
+                lastUpdated: new Date().toISOString()
+            };
+            
+            try {
+                await db.put('routine', routineState);
+            } catch (error) {
+                console.error('Error saving routine checklist:', error);
+            }
+        }
+
+        // Utility functions
+        function showNotification(message, type = 'info') {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 z-50 px-6 py-3 rounded-lg shadow-lg transition-all duration-300 transform translate-x-full`;
+            
+            // Set colors based on type
+            switch (type) {
+                case 'success':
+                    notification.className += ' bg-green-600 text-white';
+                    break;
+                case 'error':
+                    notification.className += ' bg-red-600 text-white';
+                    break;
+                case 'warning':
+                    notification.className += ' bg-yellow-600 text-white';
+                    break;
+                default:
+                    notification.className += ' bg-blue-600 text-white';
+            }
+            
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            // Animate in
+            setTimeout(() => {
+                notification.classList.remove('translate-x-full');
+            }, 100);
+            
+            // Animate out and remove
+            setTimeout(() => {
+                notification.classList.add('translate-x-full');
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+
+        function addFormValidation() {
+            // Add real-time validation to trade form
+            const tradeForm = document.getElementById('trade-form');
+            if (tradeForm) {
+                const inputs = tradeForm.querySelectorAll('input, select, textarea');
+                inputs.forEach(input => {
+                    input.addEventListener('blur', validateField);
+                    input.addEventListener('input', clearValidationError);
+                });
+            }
+        }
+
+        function validateField(event) {
+            const field = event.target;
+            const value = field.value.trim();
+            
+            // Remove existing error styling
+            field.classList.remove('border-red-500', 'bg-red-50');
+            
+            // Validate based on field type
+            if (field.type === 'number' && value) {
+                const num = parseFloat(value);
+                if (isNaN(num)) {
+                    showFieldError(field, 'Please enter a valid number');
+                    return false;
+                }
+                
+                // Specific validations
+                if (field.id === 'trade-size' && num <= 0) {
+                    showFieldError(field, 'Position size must be greater than 0');
+                    return false;
+                }
+            }
+            
+            return true;
+        }
+
+        function clearValidationError(event) {
+            const field = event.target;
+            field.classList.remove('border-red-500', 'bg-red-50');
+        }
+
+        function showFieldError(field, message) {
+            field.classList.add('border-red-500', 'bg-red-50');
+            showNotification(message, 'error');
+        }
+
+        function enableAutoSave() {
+            // Auto-save routine checklist when checkboxes change
+            document.querySelectorAll('#routine-tab input[type="checkbox"]').forEach(checkbox => {
+                checkbox.addEventListener('change', saveRoutineChecklist);
+            });
+            
+            // Auto-save market focus when fields change
+            ['volatility-pref', 'liquidity-pref', 'timezone-pref', 'pair-reasoning'].forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.addEventListener('change', debounce(saveMarketFocus, 1000));
+                }
+            });
+        }
+
+        async function saveMarketFocus() {
+            const marketFocusData = {
+                id: 'marketFocus',
+                volatilityPref: document.getElementById('volatility-pref').value,
+                liquidityPref: document.getElementById('liquidity-pref').value,
+                timezonePref: document.getElementById('timezone-pref').value,
+                pairReasoning: document.getElementById('pair-reasoning').value,
+                updatedAt: new Date().toISOString()
+            };
+            
+            try {
+                await db.put('strategy', marketFocusData);
+                marketFocus = marketFocusData;
+            } catch (error) {
+                console.error('Error auto-saving market focus:', error);
+            }
+        }
+
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        // Reports functionality
+        function updateReportsData() {
+            if (trades.length === 0) return;
+
+            // Calculate performance metrics
+            const totalTrades = trades.length;
+            const winningTrades = trades.filter(t => t.pnl > 0);
+            const losingTrades = trades.filter(t => t.pnl < 0);
+            
+            const totalPnL = trades.reduce((sum, t) => sum + t.pnl, 0);
+            const totalWins = winningTrades.reduce((sum, t) => sum + t.pnl, 0);
+            const totalLosses = Math.abs(losingTrades.reduce((sum, t) => sum + t.pnl, 0));
+            
+            // Update performance tracking
+            const accountBalance = parseFloat(localStorage.getItem('accountBalance')) || 10000;
+            const monthlyROI = ((totalPnL / accountBalance) * 100).toFixed(2);
+            const quarterlyROI = (monthlyROI * 3).toFixed(2);
+            const annualROI = (monthlyROI * 12).toFixed(2);
+            
+            document.getElementById('monthly-roi').textContent = monthlyROI + '%';
+            document.getElementById('quarterly-roi').textContent = quarterlyROI + '%';
+            document.getElementById('annual-roi').textContent = annualROI + '%';
+            
+            // Calculate Sharpe ratio (simplified)
+            const avgReturn = totalPnL / totalTrades;
+            const returns = trades.map(t => t.pnl);
+            const stdDev = Math.sqrt(returns.reduce((sum, r) => sum + Math.pow(r - avgReturn, 2), 0) / totalTrades);
+            const sharpeRatio = stdDev > 0 ? (avgReturn / stdDev).toFixed(2) : '0.00';
+            document.getElementById('sharpe-ratio').textContent = sharpeRatio;
+            
+            // Max drawdown calculation
+            let peak = accountBalance;
+            let maxDrawdown = 0;
+            let runningBalance = accountBalance;
+            
+            trades.forEach(trade => {
+                runningBalance += trade.pnl;
+                if (runningBalance > peak) peak = runningBalance;
+                const drawdown = ((peak - runningBalance) / peak) * 100;
+                if (drawdown > maxDrawdown) maxDrawdown = drawdown;
+            });
+            
+            document.getElementById('max-drawdown-display').textContent = maxDrawdown.toFixed(2) + '%';
+            
+            // Trade metrics
+            const avgWin = winningTrades.length > 0 ? (totalWins / winningTrades.length).toFixed(2) : '0';
+            const avgLoss = losingTrades.length > 0 ? (totalLosses / losingTrades.length).toFixed(2) : '0';
+            const profitFactor = totalLosses > 0 ? (totalWins / totalLosses).toFixed(2) : '0.00';
+            const bestTrade = Math.max(...trades.map(t => t.pnl)).toFixed(2);
+            const worstTrade = Math.min(...trades.map(t => t.pnl)).toFixed(2);
+            
+            document.getElementById('avg-win').textContent = '$' + avgWin;
+            document.getElementById('avg-loss').textContent = '$' + avgLoss;
+            document.getElementById('profit-factor').textContent = profitFactor;
+            document.getElementById('best-trade').textContent = '$' + bestTrade;
+            document.getElementById('worst-trade').textContent = '$' + worstTrade;
+            
+            // Time analysis
+            const tradingDays = new Set(trades.map(t => new Date(t.datetime).toDateString())).size;
+            const tradesPerDay = (totalTrades / tradingDays).toFixed(1);
+            
+            document.getElementById('trading-days').textContent = tradingDays;
+            document.getElementById('trades-per-day').textContent = tradesPerDay;
+            
+            // Best day and hour analysis
+            const dayStats = {};
+            const hourStats = {};
+            const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            
+            trades.forEach(trade => {
+                const date = new Date(trade.datetime);
+                const day = days[date.getDay()];
+                const hour = date.getHours();
+                
+                dayStats[day] = (dayStats[day] || 0) + trade.pnl;
+                hourStats[hour] = (hourStats[hour] || 0) + trade.pnl;
+            });
+            
+            const bestDay = Object.keys(dayStats).reduce((a, b) => dayStats[a] > dayStats[b] ? a : b, 'Monday');
+            const bestHour = Object.keys(hourStats).reduce((a, b) => hourStats[a] > hourStats[b] ? a : b, '9');
+            
+            document.getElementById('best-day').textContent = bestDay;
+            document.getElementById('best-hour').textContent = bestHour + ':00';
+            
+            // Update goal progress
+            updateGoalProgress();
+        }
+
+        function updateGoalProgress() {
+            const goals = JSON.parse(localStorage.getItem('tradingGoals') || '{}');
+            const totalPnL = trades.reduce((sum, t) => sum + t.pnl, 0);
+            const winRate = trades.length > 0 ? ((trades.filter(t => t.pnl > 0).length / trades.length) * 100) : 0;
+            
+            // Monthly income progress
+            const monthlyGoal = parseFloat(goals.monthlyIncome?.replace(/[^0-9.-]+/g, '')) || 0;
+            const monthlyProgress = monthlyGoal > 0 ? Math.min((totalPnL / monthlyGoal) * 100, 100) : 0;
+            document.getElementById('monthly-goal-progress').textContent = monthlyProgress.toFixed(1) + '%';
+            document.getElementById('monthly-progress-bar').style.width = monthlyProgress + '%';
+            
+            // Win rate progress
+            const winRateGoal = parseFloat(goals.winRate?.replace(/[^0-9.-]+/g, '')) || 0;
+            const winRateProgress = winRateGoal > 0 ? Math.min((winRate / winRateGoal) * 100, 100) : 0;
+            document.getElementById('winrate-goal-progress').textContent = winRateProgress.toFixed(1) + '%';
+            document.getElementById('winrate-progress-bar').style.width = winRateProgress + '%';
+            
+            // Annual growth progress
+            const accountBalance = parseFloat(localStorage.getItem('accountBalance')) || 10000;
+            const growthGoal = parseFloat(goals.growthTarget?.replace(/[^0-9.-]+/g, '')) || 0;
+            const currentGrowth = ((totalPnL / accountBalance) * 100);
+            const annualProgress = growthGoal > 0 ? Math.min((currentGrowth / growthGoal) * 100, 100) : 0;
+            document.getElementById('annual-goal-progress').textContent = annualProgress.toFixed(1) + '%';
+            document.getElementById('annual-progress-bar').style.width = annualProgress + '%';
+            
+            // Goal status
+            let status = 'Goals are being tracked. ';
+            if (monthlyProgress >= 100) status += 'Monthly goal achieved! ';
+            if (winRateProgress >= 100) status += 'Win rate goal achieved! ';
+            if (annualProgress >= 100) status += 'Annual growth goal achieved! ';
+            
+            document.getElementById('goal-status').textContent = status;
+        }
+
+        function generateMonthlyReport() {
+            const reportPeriod = document.getElementById('report-month').value;
+            const now = new Date();
+            let filteredTrades = trades;
+            
+            if (reportPeriod === 'current') {
+                filteredTrades = trades.filter(t => {
+                    const tradeDate = new Date(t.datetime);
+                    return tradeDate.getMonth() === now.getMonth() && tradeDate.getFullYear() === now.getFullYear();
+                });
+            } else if (reportPeriod === 'last') {
+                const lastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+                filteredTrades = trades.filter(t => {
+                    const tradeDate = new Date(t.datetime);
+                    return tradeDate.getMonth() === lastMonth.getMonth() && tradeDate.getFullYear() === lastMonth.getFullYear();
+                });
+            }
+            
+            if (filteredTrades.length === 0) {
+                document.getElementById('monthly-report-content').innerHTML = '<div class="text-center text-gray-500 py-4">No trades found for selected period</div>';
+                return;
+            }
+            
+            const totalTrades = filteredTrades.length;
+            const winningTrades = filteredTrades.filter(t => t.pnl > 0).length;
+            const winRate = ((winningTrades / totalTrades) * 100).toFixed(1);
+            const totalPnL = filteredTrades.reduce((sum, t) => sum + t.pnl, 0);
+            const totalPips = filteredTrades.reduce((sum, t) => sum + t.pips, 0);
+            
+            const reportHtml = `
+                <div class="space-y-3">
+                    <div class="flex justify-between"><span>Total Trades:</span><span class="font-semibold">${totalTrades}</span></div>
+                    <div class="flex justify-between"><span>Winning Trades:</span><span class="font-semibold text-green-600">${winningTrades}</span></div>
+                    <div class="flex justify-between"><span>Win Rate:</span><span class="font-semibold">${winRate}%</span></div>
+                    <div class="flex justify-between"><span>Total P&L:</span><span class="font-semibold ${totalPnL >= 0 ? 'text-green-600' : 'text-red-600'}">$${totalPnL.toFixed(2)}</span></div>
+                    <div class="flex justify-between"><span>Total Pips:</span><span class="font-semibold ${totalPips >= 0 ? 'text-green-600' : 'text-red-600'}">${totalPips.toFixed(1)}</span></div>
+                    <div class="flex justify-between"><span>Avg per Trade:</span><span class="font-semibold">$${(totalPnL / totalTrades).toFixed(2)}</span></div>
+                </div>
+            `;
+            
+            document.getElementById('monthly-report-content').innerHTML = reportHtml;
+        }
+
+        // Export functions
+        function exportDetailedReport() {
+            if (trades.length === 0) {
+                alert('No trades to export!');
+                return;
+            }
+            
+            const reportData = generateDetailedReportData();
+            const csvContent = convertToCSV(reportData);
+            downloadCSV(csvContent, 'detailed_trading_report.csv');
+        }
+
+        function exportTaxReport() {
+            if (trades.length === 0) {
+                alert('No trades to export!');
+                return;
+            }
+            
+            const taxData = trades.map(trade => ({
+                Date: new Date(trade.datetime).toLocaleDateString(),
+                Pair: trade.pair,
+                'Gain/Loss': trade.pnl.toFixed(2),
+                'Trade Type': trade.direction,
+                'Hold Period': 'Short-term' // Forex is typically short-term
+            }));
+            
+            const csvContent = convertToCSV(taxData);
+            downloadCSV(csvContent, 'tax_report.csv');
+        }
+
+        async function backupAllData() {
+            try {
+                const allData = {
+                    trades: await db.getAll('trades'),
+                    goals: await db.getAll('goals'),
+                    strategy: await db.getAll('strategy'),
+                    riskManagement: await db.getAll('riskManagement'),
+                    routine: await db.getAll('routine'),
+                    analytics: await db.getAll('analytics'),
+                    settings: await db.getAll('settings'),
+                    marketData: await db.getAll('marketData'),
+                    exportDate: new Date().toISOString(),
+                    version: '2.0'
+                };
+                
+                const dataStr = JSON.stringify(allData, null, 2);
+                const blob = new Blob([dataStr], { type: 'application/json' });
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `forex_trading_backup_${new Date().toISOString().split('T')[0]}.json`;
+                a.click();
+                window.URL.revokeObjectURL(url);
+                
+                showNotification('Complete backup created successfully!', 'success');
+            } catch (error) {
+                console.error('Error creating backup:', error);
+                showNotification('Error creating backup. Please try again.', 'error');
+            }
+        }
+
+        function printReport() {
+            window.print();
+        }
+
+        function generateDetailedReportData() {
+            return trades.map(trade => ({
+                'Date': new Date(trade.datetime).toLocaleString(),
+                'Pair': trade.pair,
+                'Direction': trade.direction,
+                'Entry': trade.entry,
+                'Exit': trade.exit,
+                'Size (Lots)': trade.size,
+                'Stop Loss': trade.stopLoss,
+                'Take Profit': trade.takeProfit,
+                'Pips': trade.pips,
+                'P&L': trade.pnl,
+                'Setup': trade.setup,
+                'Emotion': trade.emotion,
+                'Score': trade.score,
+                'Reason': trade.reason,
+                'Improvements': trade.mistakes
+            }));
+        }
+
+        function convertToCSV(data) {
+            if (data.length === 0) return '';
+            
+            const headers = Object.keys(data[0]);
+            const csvRows = [
+                headers.join(','),
+                ...data.map(row => 
+                    headers.map(header => {
+                        const value = row[header];
+                        return typeof value === 'string' && value.includes(',') ? `"${value}"` : value;
+                    }).join(',')
+                )
+            ];
+            
+            return csvRows.join('\n');
+        }
+
+        function downloadCSV(csvContent, filename) {
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9822227e94217409',t:'MTc1ODM3OTgyMi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
